@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/app.css" />
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/typehead.css" />
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Lync-Caller</a>
+                </div>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group" id="remote">
+                        <input type="text" class="form-control typeahead" placeholder="Search employee">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="starter-template">
+                <!--                <span id="remote" class="twitter-typeahead">
+                                    <input class="typeahead form-control" type="text" placeholder="Oscar winners for Best Picture">
+                                </span>-->
+            </div>
+
+            <div>
+                <div class="col-md-4">
+                    <img class="img-circle img-responsive" src="http://0.gravatar.com/avatar/34dbedb61632979ce94aaa9c6ae20c04?s=200" />
+                </div>
+
+                <div class="col-md-8">
+                    <p>Vinay Bedre</p>
+                    <p>+91-9482527365</p>
+                </div>
+
+            </div>
+
+        </div><!-- /.container -->
+
+
+        <script src="js/jquery-2.1.1.min.js" ></script>
+        <script src="js/bootstrap.min.js" ></script>
+        <script src="js/typeahead.bundle.min.js"></script>
+        <script src="js/handlebar.js"></script>
+        <script>
+            var bestPictures = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                //prefetch: '../data/films/post_1960.json',
+                remote: 'http://twitter.github.io/typeahead.js/data/films/queries/%QUERY.json'
+            });
+
+            bestPictures.initialize();
+
+            $('#remote .typeahead').typeahead(null, {
+                name: 'best-pictures',
+                displayKey: 'value',
+                source: bestPictures.ttAdapter(),
+                hint: true,
+                highlight: true,
+//                template:"<p><strong>{{value}} Vinay</strong></p>"
+                templates: {
+                    empty: [
+                        '<div class="alert alert-warning">',
+                        'Not connected',
+                        '</div>'
+                    ].join('\n'),
+                    suggestion: Handlebars.compile('<div>                <div class="col-md-4">                    <img class="img-circle img-responsive" src="http://0.gravatar.com/avatar/34dbedb61632979ce94aaa9c6ae20c04?s=200" />                </div>                <div class="col-md-8">                    <p>{{value}}</p>                    <p>+91-9482527365</p>                </div>            </div>')
+                }
+            }).on("typeahead:selected", function($e, datum) {
+                console.log(datum);
+            });
+
+        </script>
+
+    </body>
+</html>
